@@ -52,19 +52,23 @@ public class HyperlinkerService {
 
         Elements els = body.getAllElements();
 
+        // TODO: Re-annotates existing links
         for (Element e : els) {
             List<TextNode> tnList = e.textNodes();
             for (TextNode tn : tnList){
                 String orig = tn.text();
 
                 // split text into tokens
-                String[] tokens = orig.split("\\W");
+                String[] tokens = orig.split("[^a-zA-Z0-9]");
+
+                for (String t : tokens) System.out.print(t + " ");
+                System.out.println();
 
                 // check all tokens, replacing if necessary
                 for (String key : tokens) {
                     if (hyperlinks.containsKey(key)) {
                         String hyperlinked = "<a href=\"" + hyperlinks.get(key) + "\">" + key + "</a>";
-                        tn.text(orig.replaceAll(key, hyperlinked));
+                        tn.text(orig.replaceAll("\\b" + key + "\\b", hyperlinked));
                     }
                 }
             }
@@ -72,8 +76,7 @@ public class HyperlinkerService {
 
         // TODO: deal with "&lt;" and "&gt;" problem better
         String modified = body.toString();
-        modified = modified.replaceAll("&lt;", "<");
-        modified = modified.replaceAll("&gt;", ">");
+        modified = modified.replaceAll("&lt;", "<").replaceAll("&gt;", ">").replace("\n", "").replace("<body> ", "");
         return modified;
     }
 }
