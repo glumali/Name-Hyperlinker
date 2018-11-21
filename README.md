@@ -23,9 +23,9 @@ _For all below, N is the number of names inserted into the server._
 
 **PUT on /names/{name}**
 
-Space: O(N) - HashMap structure is used to hold name-link pairs, space grows with each added
+Space: O(N) - HashMap structure is used to hold name-link pairs, space grows with each added. Assuming that, over time, this service will be annotating more than it will be inserting new hyperlinks into the server, the quick insert/delete of a HashMap far outweighs the downside of the extra space needed to store each element in a HashMap.
 
-Time: O(1) - constant-time put into a HashMap
+Time: O(1) - constant-time put into a HashMap. Not only is a HashMap intuitive for dealing with key-value pairs of name-link, but a HashMap also supports quick insert and delete of elements. A structure such as an array or List that takes O(N) time per insert would be too slow for large N as the size of the server grows.
 
 **GET on /names/{name}**
 
@@ -41,8 +41,8 @@ Time: O(N) - must delete all N entries from the HashMap
 
 **POST on /annotate**
 
-_For this below, k is the number of elements in the parsed HTML._
+_For this below, k is the number of text elements in the parsed HTML._
 
-Space: O(k) - each element is encapsulated in a Jsoup.Element object
+Space: O(k) - each element is encapsulated in a Jsoup.Element object when the input HTML is parsed. This allows the HTML to be meaningfully parsed and modified.
 
-Time: O(Nk) - for each element, must search through HashMap if contained within
+Time: O(Nk) - for each element, must search through HashMap if contained within. Generally, the input HTML snippet is parsed into a list of TextNodes, which are then processed word-by-word to search through the HashMap for a link, then replacing it if applicable. 
